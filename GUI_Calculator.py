@@ -5,6 +5,8 @@ from tkinter import ttk
 root = tk.Tk()
 
 num = tk.StringVar()
+operation = ""
+first_number = 0
 
 root.title('Calculator')
 root.geometry('250x350+50+50')
@@ -15,36 +17,66 @@ for i in range(4):
 for i in range(5):
     root.rowconfigure(i+1, weight=1)
 
+
+def press(key):
+    current_text = num.get()
+    updated_text = current_text + str(key)
+    num.set(updated_text)
+
+def operation_press(op):
+    global first_number
+    global operation
+    first_number = float(num.get())
+    operation = op
+    clear()
+
+def clear():
+    num.set("")
+    first_number = 0
+    operation = ""
+
+def equal_press():
+    if operation == '+':
+        result = first_number + float(num.get())
+    elif operation == '-':
+        result = first_number - float(num.get())
+    elif operation == '*':
+        result = first_number * float(num.get())
+    else:
+        result = first_number / float(num.get())
+    
+    num.set(str(result))
+
 display = ttk.Entry(root, textvariable=num, font= ('Calibri', 15), state=DISABLED)
 
 #Row 1
-clear_button = ttk.Button(root, text="C")
+clear_button = ttk.Button(root, text="C", command=lambda: clear())
 percentage_button = ttk.Button(root, text='%')
 compare_button = ttk.Button(root, text='<')
-division_button = ttk.Button(root, text='/')
+division_button = ttk.Button(root, text='/', command=lambda: operation_press('/'))
 
 #Row 2
-seven_button = ttk.Button(root, text='7')
-eight_button = ttk.Button(root, text='8')
-nine_button = ttk.Button(root, text='9')
-multi_button = ttk.Button(root, text='*')
+seven_button = ttk.Button(root, text='7', command=lambda: press('7'))
+eight_button = ttk.Button(root, text='8', command=lambda: press('8'))
+nine_button = ttk.Button(root, text='9', command=lambda: press('9'))
+multi_button = ttk.Button(root, text='*', command=lambda: operation_press('*'))
 
 #Row 3
-four_button = ttk.Button(root, text='4')
-five_button = ttk.Button(root, text='5')
-six_button = ttk.Button(root, text='6')
-minus_button = ttk.Button(root, text='-')
+four_button = ttk.Button(root, text='4', command=lambda: press('4'))
+five_button = ttk.Button(root, text='5', command=lambda: press('5'))
+six_button = ttk.Button(root, text='6', command=lambda: press('6'))
+minus_button = ttk.Button(root, text='-', command=lambda: operation_press('-'))
 
 #Row 4
-one_button = ttk.Button(root, text='1')
-two_button = ttk.Button(root, text='2')
-three_button = ttk.Button(root, text='3')
-add_button = ttk.Button(root, text='+')
+one_button = ttk.Button(root, text='1', command=lambda: press('1'))
+two_button = ttk.Button(root, text='2', command=lambda: press('2'))
+three_button = ttk.Button(root, text='3', command=lambda: press('3'))
+add_button = ttk.Button(root, text='+', command=lambda: operation_press('+'))
 
 #Row 5
-zero_button = ttk.Button(root, text='0')
-dot_button = ttk.Button(root, text='.')
-equal_button = ttk.Button(root, text='=')
+zero_button = ttk.Button(root, text='0', command=lambda: press('0'))
+dot_button = ttk.Button(root, text='.', command=lambda: press('.'))
+equal_button = ttk.Button(root, text='=', command=lambda: equal_press())
 
 #Show display
 display.grid(row = 0, column=0, columnspan=4, sticky="we")
