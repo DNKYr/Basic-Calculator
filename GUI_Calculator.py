@@ -5,6 +5,7 @@ from tkinter import ttk
 root = tk.Tk()
 
 num = tk.StringVar()
+num.set("")
 operation = ""
 first_number = 0
 
@@ -28,24 +29,32 @@ def operation_press(op):
     global operation
     first_number = float(num.get())
     operation = op
-    clear()
+    num.set("")
 
 def clear():
+    global first_number
+    global operation
     num.set("")
     first_number = 0
     operation = ""
 
 def equal_press():
-    if operation == '+':
-        result = first_number + float(num.get())
-    elif operation == '-':
-        result = first_number - float(num.get())
-    elif operation == '*':
-        result = first_number * float(num.get())
-    else:
-        result = first_number / float(num.get())
-    
-    num.set(str(result))
+    try: 
+        second_number = float(num.get())
+        result = 0
+        if operation == '+':
+            result = first_number + second_number
+        elif operation == '-':
+            result = first_number - second_number
+        elif operation == '*':
+            result = first_number * second_number
+        elif operation == '/':
+            result = first_number / second_number
+        num.set(str(result))
+    except ZeroDivisionError:
+        num.set("Error")
+    except ValueError:
+        num.set("Error")
 
 display = ttk.Entry(root, textvariable=num, font= ('Calibri', 15), state=DISABLED)
 
